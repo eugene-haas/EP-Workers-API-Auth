@@ -1,0 +1,16 @@
+{
+  "name": "EP-Workers-API-Auth",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "repository": "https://github.com/eugene-haas/EP-Workers-API-Auth",
+  "author": "Eugene",
+  "license": "The Unlicense",
+  "private": true,
+  "devDependencies": {
+    "jest": "^29.1.2",
+    "wrangler": "^2.1.10"
+  },
+  "dependencies": {
+    "@tsndr/cloudflare-worker-router": "^2.2.0"
+  }
+}
