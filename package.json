@@ -11,6 +11,7 @@
     "wrangler": "^2.1.10"
   },
   "dependencies": {
-    "@tsndr/cloudflare-worker-router": "^2.2.0"
+    "@tsndr/cloudflare-worker-router": "^2.2.0",
+    "itty-router": "^2.6.6"
   }
 }

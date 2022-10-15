@@ -2,3 +2,16 @@ name = "ep-workers-api-auth"
 main = "src/index.js"
 compatibility_date = "2022-10-08"
 node_compat=true
+account_id="99198e5a7bc1819cd50c77db44a64fe2"
+
+kv_namespaces = [
+  { binding = "KV_FP_Users", id = "032802e53e0047f1a45a0cd3d39831ab", preview_id = "7a37bed0cf6d48dd9f18606554679fb8" }
+]
+
+[vars]
+UKEY = "djfklsdajfkdas"
+
+[env.production]
+name = "my-worker-production"
+
+

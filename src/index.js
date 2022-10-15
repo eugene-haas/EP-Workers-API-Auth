@@ -1,69 +1,66 @@
-import { Router } from '@tsndr/cloudflare-worker-router'
+import { Router } from 'itty-router'
 
-// Initialize router
-const router = new Router()
+const router = Router() 
 
-// Enabling build in CORS support
-router.cors()
+// a generic error handler
+const errorHandler = error =>
+	new Response(error.message || 'Server Error', { status: error.status || 500 })
 
-// Register global middleware
-router.use(({ req, res, next }) => {
-	res.headers.set('X-Global-Middlewares', 'true')
-	next()
+
+// basic router
+router.get('/', (req) => {
+	const { params, query } = req
+
+	console.log({ params, query })
+
+	return new Response(JSON.stringify({code: "idjflasjdfkldja"}))
 })
 
-//index
-router.get('/', ({req, res}) => {
-	res.body = 'Hi, Workers!'
+// Example :: KV put
+router.post('/user', async (req) => {
+	try {
+		//const contents = JSON.stringify(await req.json())
+		const contents = await req.json()
+		const cKey = Object.keys(contents)
+		const cVal = Object.values(contents)
+		console.log('con:',contents.name)
+
+		await KV_FP_Users.put(cKey[0], cVal[0])
+	} catch(error) {
+		console.error(error.message)
+	}
+
+	return new Response(JSON.stringify({code: "success"}))
 })
 
-// Simple get
-router.get('/user', ({ req, res }) => {
-	res.body = {
-		data: {
-		id: 1,
-		name: 'John Doe'
+//Example :: KV get
+router.get('/user/:name', async (req) => {
+	const result = {}
+	try {
+		const { params } = req
+		const cKey = params.name
+		//await KV_FP_Users.put('ukey', '38490328490899')
+		//const ukey = await KV_FP_Users.get('ukey')
+		let kvVal = await KV_FP_Users.get(cKey)
+	
+		console.log('kv- ukey:',kvVal)
+		console.log('get toml var - UKEY:', UKEY)
+		if (kvVal === null) {
+			throw new Error('KV 값 없음.')
 		}
+		result.cKey = kvVal
+	} catch(error) {
+		console.error(error.message)
 	}
+
+	return new Response(JSON.stringify(result))
 })
 
-// Post route with url parameter
-router.post('/user/:id', ({ req, res }) => {
 
-	const userId = req.params.id
-
-	// Do stuff...
-
-	if (errorDoingStuff) {
-		res.status = 400
-		res.body = {
-		error: 'User did stupid stuff!'
-		}
-		return
-	}
-
-	res.status = 204
-})
-
-// Delete route using a middleware
-router.delete('/user/:id', async ({ req, res, next }) => {
-
-	if (!apiTokenIsCorrect) {
-		res.status = 401
-		return
-	}
-
-	await next()
-}, (req, res) => {
-
-	const userId = req.params.id
-
-	// Do stuff...
-})
-
-// Listen Cloudflare Workers Fetch Event
-export default {
-	async fetch(request, env) {
-		return router.handle(env, request)
-	}
-}
+addEventListener('fetch', event => 
+	event.respondWith(
+		router
+			.handle(event.request)
+			.catch(errorHandler)
+		)
+)

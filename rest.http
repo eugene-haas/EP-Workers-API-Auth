@@ -4,8 +4,27 @@
 GET {{host}} HTTP/1.1
 Content-Type: application/json
 
-### user
-GET {{host}}/user HTTP/1.1
+### post user
+POST {{host}}/user HTTP/1.1
 Content-Type: application/json
 
+{"name": "eugene", "birth": "2000-0908"}
 
+### get user
+GET {{host}}/user/name HTTP/1.1
+Content-Type: application/json
+
+### user
+GET {{host}}/kv/dff3im4mlkm4 HTTP/1.1
+Content-Type: application/json
+
+### user put
+POST {{host}}/kv HTTP/1.1
+Content-Type: application/json
+
+{"key": "dff3im4mlkm4", "data": {"name": "Rolle Doe","area":"USA","email":"doe@gamil.com"}}
+
+
+###
+GET {{host}}/api HTTP/1.1
+Content-Type: application/json
